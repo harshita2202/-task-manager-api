@@ -4,9 +4,6 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const router = express.Router();
 
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
-
 // Signup
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
