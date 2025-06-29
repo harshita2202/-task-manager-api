@@ -56,6 +56,43 @@ function Habits() {
     fetchHabits(); // Refresh the habit list
   };
 
+const deleteHabit = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/habits/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const text = await res.text();
+      const parsed = text ? JSON.parse(text) : {};
+      if (res.ok) {
+        setMessage(parsed.message || 'Habit deleted');
+        fetchHabits(); // refresh
+      } else {
+        setMessage(parsed.error || 'Failed to delete');
+      }
+    } catch (err) {
+      console.error('Delete error:', err);
+      setMessage('Error deleting habit');
+    }
+  };
+
+
+
+
+const editHabit = async (id, newName) => {
+  const res = await fetch(`http://192.168.56.1:5000/api/habits/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name: newName }),
+  });
+   await res.json();
+  setMessage('Habit updated');
+  fetchHabits();
+};
+
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '1rem' }}>
       <h2>Habit Dashboard</h2>
@@ -75,12 +112,19 @@ function Habits() {
       </div>
 
       <ul style={{ marginTop: '20px' }}>
-        {habits.map(h => (
-          <li key={h._id} style={{ marginBottom: '10px' }}>
-            <strong>{h.name}</strong> (Streak: {h.streak}){' '}
-            <button onClick={() => markComplete(h._id)}>Mark Today</button>
-          </li>
-        ))}
+{habits.map(h => (
+  <li key={h._id}>
+    <input
+      type="text"
+      defaultValue={h.name}
+      onBlur={(e) => editHabit(h._id, e.target.value)}
+    />
+    <span> (Streak: {h.streak}) </span>
+    <button onClick={() => markComplete(h._id)}>Mark Today</button>
+    <button onClick={() => deleteHabit(h._id)}>Delete</button>
+  </li>
+))}
+
       </ul>
     </div>
   );
