@@ -5,7 +5,7 @@ const authRoutes = require('./routes/auth');
 
 // Enable CORS so frontend (e.g., Vercel) can call the backend
 app.use(cors({
-  origin: 'https://habit-tracker-one-ecru.vercel.app/', // replace with your actual Vercel URL
+  origin: 'https://habit-tracker-one-ecru.vercel.app', // removed trailing slash
   credentials: true
 }));
 app.use(express.json()); // to parse JSON request bodies
@@ -19,10 +19,6 @@ app.get('/', (req, res) => {
 // Example:
 app.get('/api/test', (req, res) => {
   res.json({ success: true, message: 'API is working fine!' });
-});
- 
-app.get('/api/test', (req, res) => {
-  res.json({ message: "✅ API working fine!" });
 });
 
 app.use('/api/auth', authRoutes);
