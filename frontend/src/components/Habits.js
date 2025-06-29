@@ -7,10 +7,12 @@ function Habits() {
   const [newHabit, setNewHabit] = useState('');
   const [message, setMessage] = useState('');
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // ✅ useCallback to avoid ESLint warning in useEffect
   const fetchHabits = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/habits', {
+      const res = await fetch(`${API_URL}/api/habits`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -26,9 +28,7 @@ function Habits() {
   }, [fetchHabits]);
 
   const addHabit = async () => {
-    const res = await fetch('http://localhost:5000/api/habits',
-     
- {
+    const res = await fetch(`${API_URL}/api/habits`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ function Habits() {
   };
 
   const markComplete = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/habits/${id}/complete`, {
+    const res = await fetch(`${API_URL}/api/habits/${id}/complete`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -56,9 +56,9 @@ function Habits() {
     fetchHabits(); // Refresh the habit list
   };
 
-const deleteHabit = async (id) => {
+  const deleteHabit = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/habits/${id}`, {
+      const res = await fetch(`${API_URL}/api/habits/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -76,22 +76,19 @@ const deleteHabit = async (id) => {
     }
   };
 
-
-
-
-const editHabit = async (id, newName) => {
-  const res = await fetch(`http://192.168.56.1:5000/api/habits/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ name: newName }),
-  });
-   await res.json();
-  setMessage('Habit updated');
-  fetchHabits();
-};
+  const editHabit = async (id, newName) => {
+    const res = await fetch(`${API_URL}/api/habits/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name: newName }),
+    });
+    await res.json();
+    setMessage('Habit updated');
+    fetchHabits();
+  };
 
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '1rem' }}>
@@ -112,19 +109,18 @@ const editHabit = async (id, newName) => {
       </div>
 
       <ul style={{ marginTop: '20px' }}>
-{habits.map(h => (
-  <li key={h._id}>
-    <input
-      type="text"
-      defaultValue={h.name}
-      onBlur={(e) => editHabit(h._id, e.target.value)}
-    />
-    <span> (Streak: {h.streak}) </span>
-    <button onClick={() => markComplete(h._id)}>Mark Today</button>
-    <button onClick={() => deleteHabit(h._id)}>Delete</button>
-  </li>
-))}
-
+        {habits.map(h => (
+          <li key={h._id}>
+            <input
+              type="text"
+              defaultValue={h.name}
+              onBlur={(e) => editHabit(h._id, e.target.value)}
+            />
+            <span> (Streak: {h.streak}) </span>
+            <button onClick={() => markComplete(h._id)}>Mark Today</button>
+            <button onClick={() => deleteHabit(h._id)}>Delete</button>
+          </li>
+        ))}
       </ul>
     </div>
   );

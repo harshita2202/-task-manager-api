@@ -3,7 +3,10 @@ const cors = require('cors');
 const app = express();
 
 // Enable CORS so frontend (e.g., Vercel) can call the backend
-app.use(cors());
+app.use(cors({
+  origin: 'https://habit-tracker-one-ecru.vercel.app/', // replace with your actual Vercel URL
+  credentials: true
+}));
 app.use(express.json()); // to parse JSON request bodies
 
 // ✅ Root route for Render test
