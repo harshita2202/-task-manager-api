@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const authRoutes = require('./routes/auth');
 
 // Enable CORS so frontend (e.g., Vercel) can call the backend
 app.use(cors({
@@ -23,6 +24,8 @@ app.get('/api/test', (req, res) => {
 app.get('/api/test', (req, res) => {
   res.json({ message: "✅ API working fine!" });
 });
+
+app.use('/api/auth', authRoutes);
 
 // ✅ Use PORT from environment (Render assigns this automatically)
 const PORT = process.env.PORT || 5000;
