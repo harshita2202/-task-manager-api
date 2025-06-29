@@ -16,6 +16,10 @@ app.get('/', (req, res) => {
 app.get('/api/test', (req, res) => {
   res.json({ success: true, message: 'API is working fine!' });
 });
+ 
+app.get('/api/test', (req, res) => {
+  res.json({ message: "✅ API working fine!" });
+});
 
 // ✅ Use PORT from environment (Render assigns this automatically)
 const PORT = process.env.PORT || 5000;
