@@ -23,6 +23,14 @@ app.get('/api/test', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 
+console.log('Auth routes loaded:', typeof authRoutes);
+console.log('Registered routes:');
+app._router.stack.forEach(r => {
+  if (r.route && r.route.path) {
+    console.log(r.route.path, Object.keys(r.route.methods));
+  }
+});
+
 // ✅ Use PORT from environment (Render assigns this automatically)
 const PORT = process.env.PORT || 5000;
 
