@@ -60,5 +60,51 @@ router.post('/:id/complete', auth, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const habit = await Habit.findOneAndUpdate(
+      { _id: req.params.id, user: req.userId },
+      { name: req.body.name },
+      { new: true }
+    );
+    if (!habit) return res.status(404).json({ error: 'Habit not found' });
+    res.json(habit);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const habit = await Habit.findOneAndUpdate(
+      { _id: req.params.id, user: req.userId },
+      { name: req.body.name },
+      { new: true }
+    );
+    if (!habit) return res.status(404).json({ error: 'Habit not found' });
+    res.json(habit);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+// DELETE a habit
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const habit = await Habit.findOneAndDelete({
+      _id: req.params.id,
+      user: req.userId,
+    });
+
+    if (!habit) {
+      return res.status(404).json({ error: 'Habit not found' });
+    }
+
+    // ✅ Return a proper JSON response
+    res.status(200).json({ message: 'Habit deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;

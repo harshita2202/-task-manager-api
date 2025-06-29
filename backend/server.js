@@ -1,23 +1,25 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
-
 const app = express();
 
-
-app.use(express.json());
+// Enable CORS so frontend (e.g., Vercel) can call the backend
 app.use(cors());
+app.use(express.json()); // to parse JSON request bodies
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to DB!"))
-  .catch(err => console.log(err));
+// ✅ Root route for Render test
+app.get('/', (req, res) => {
+  res.send('✅ Backend is live and working on Render!');
+});
 
-// Routes (we'll add these next)
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/habits', require('./routes/habits'));
+// 🔧 Add your API routes below
+// Example:
+app.get('/api/test', (req, res) => {
+  res.json({ success: true, message: 'API is working fine!' });
+});
 
-// Start the server
+// ✅ Use PORT from environment (Render assigns this automatically)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log('Server running on port ${PORT}');
+});
