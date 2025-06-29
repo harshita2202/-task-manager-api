@@ -8,6 +8,7 @@ function Habits() {
   const [message, setMessage] = useState('');
 
   const API_URL = process.env.REACT_APP_API_URL;
+  console.log('API_URL:', API_URL);
 
   // ✅ useCallback to avoid ESLint warning in useEffect
   const fetchHabits = useCallback(async () => {

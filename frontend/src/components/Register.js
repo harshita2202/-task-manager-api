@@ -10,6 +10,7 @@ function Register() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
+  console.log('API_URL:', API_URL);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
